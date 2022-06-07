@@ -3,10 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0 maximum-scale=1, user-scalable=no">
+    <link href="./styles/index.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css" rel="stylesheet">
     <title>Weather Report</title>
 </head>
 <body>
-    
+    <div id="top-container">
+        <div id="city-search-bar" class="col-9">
+            <form>
+                <input type="text" id="city-search-box" placeholder="Type a city" autocomplete="off"/>
+                <button type="submit">
+                    <i class="fas fa-search"></i>
+                </button>
+                <button type="button">
+                    <i class="fas fa-location-arrow"></i>
+                </button>
+            </form>
+        </div>
+        <div id="temperature-conversion" class="col-3">
+            <button type="button" id="celsius">&#8451;</button>
+            <button type="button" id="fahrenheit">&#8457;</button>
+        </div>
+    </div>
+    </div>
+    <div>
+        <h3 id="city-name">CITY NAME</h3>
+        <p id="date-time">Current Date & Time</p>
+        <p id="weather-description">Current Weather Description</p>
+    </div>
+    <script src="./src/index.js"></script>
+    <script src="./node_modules/axios/dist/axios.min.js"></script>
 </body>
 </html>
