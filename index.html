@@ -19,6 +19,7 @@
                 <button type="button">
                     <i class="fas fa-location-arrow"></i>
                 </button>
+                <button type="button">Reset</button>
             </form>
         </div>
         <div id="temperature-conversion" class="col-3">
@@ -31,6 +32,39 @@
         <h3 id="city-name">CITY NAME</h3>
         <p id="date-time">Current Date & Time</p>
         <p id="weather-description">Current Weather Description</p>
+    </div>
+    <div id="weather-icon-temp">
+        <h3>TODAY</h3>
+        <span class="fas fa-cloud-rain"> Rainy</span>
+        <p>65 &#8457;</p>
+    </div>
+    <div id="get-temperature">
+        <h3>TEMP</h3>
+        <span class="fas fa-arrow-up"></span>
+        <span class="fas fa-arrow-down"></span>
+        <button type="button">Get Realtime Temp</button>
+    </div>
+    <div id="sky-dropdown">
+        <h3>SKY</h3>
+        <label for="sky-select"></label>
+        <select name="sky" id="sky-select">
+            <option value="Cloudy">Cloudy</option>
+            <option value="Rainy">Rainy</option>
+            <option value="Sunny">Sunny</option>
+            <option value="Snowy">Snowy</option>
+        </select>
+    </div>
+    <div id="weather-garden">
+        <h3>WEATHER GARDEN</h3>
+        <div id="weather-garden-emojis">
+            ❄️☀️🌧️☁️
+        </div>
+    </div>
+    <div id="sky">
+        <h3>SKY</h3>
+    </div>
+    <div id="garden">
+        <h3>GARDEN</h3>
     </div>
     <script src="./src/index.js"></script>
     <script src="./node_modules/axios/dist/axios.min.js"></script>
