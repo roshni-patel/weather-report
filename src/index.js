@@ -5,6 +5,14 @@ const landscape = document.getElementById('landscape');
 
 const getCurrentTemp = () => parseInt(currentTempElement.textContent);
 
+const input = document.querySelector('input');
+const cityName = document.getElementById('city-name');
+
+const updateCityName = (e) => {
+  cityName.textContent = e.target.value;
+};
+input.oninput = updateCityName;
+
 const updateDisplay = () => {
   const currentTemp = getCurrentTemp();
   if (currentTemp >= 80) {

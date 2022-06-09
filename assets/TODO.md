@@ -22,11 +22,11 @@ Changing landscapes should replace the existing landscape. There should only be 
 There must be at least four landscapes.
 - [x] Make one commit
 ### Wave 3
-- [] An element that displays the city name
-- [] The city name must update every time there's a change to the text input element.
+- [x] An element that displays the city name
+- [x] The city name must update every time there's a change to the text input element.
 Hint: This feature requires you to grab the value of the text input element.
-- [] An element that contains an <input type="text"> element, used to rename the city
-- [] Make one commit
+- [x] An element that contains an <input type="text"> element, used to rename the city
+- [x] Make one commit
 ### Wave 4
 - [] A clickable element to get the current temperature of the displayed city name
 - [] Add a button element
