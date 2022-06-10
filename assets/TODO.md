@@ -28,15 +28,15 @@ Hint: This feature requires you to grab the value of the text input element.
 - [x] An element that contains an <input type="text"> element, used to rename the city
 - [x] Make one commit
 ### Wave 4
-- [] A clickable element to get the current temperature of the displayed city name
-- [] Add a button element
-- [] Get the latitude and longitude of the city using the LocationIQ API
-- [] Then use the latitude and longitude with the OpenWeather API to get current weather data
-- [] To get started and generate API tokens, create accounts and log into LocationIQ and OpenWeather.
-- [] Make axios calls to our Weather Report proxy server. (provided)
-- [] add a .env file with your API keys.
-- [] Check to make sure VS code error doesn't happen (see other tab)
-- [] Make one commit
+- [x] A clickable element to get the current temperature of the displayed city name
+- [x] Add a button element
+- [x] Get the latitude and longitude of the city using the LocationIQ API
+- [x] Then use the latitude and longitude with the OpenWeather API to get current weather data
+- [x] To get started and generate API tokens, create accounts and log into LocationIQ and OpenWeather.
+- [x] Make axios calls to our Weather Report proxy server. (provided)
+- [x] add a .env file with your API keys.
+- [x] Check to make sure VS code error doesn't happen (see other tab)
+- [x] Make one commit
 ## Wave 5
 - [] A \<select> dropdown element to set the sky type
 - [] Changing the sky should replace the existing sky. 
