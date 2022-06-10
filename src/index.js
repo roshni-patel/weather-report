@@ -3,21 +3,10 @@
 const currentTempElement = document.getElementById('current-temp');
 const landscape = document.getElementById('landscape');
 const skyOptionElement = document.getElementById('sky-select');
-
-const getCurrentTemp = () => parseInt(currentTempElement.textContent);
-
 const input = document.querySelector('input');
 const cityName = document.getElementById('city-name');
 
-// We don't need this since we decided we only want the city name to display once we submit
-// const updateCityName = (e) => {
-//   if (e.target.value.length > 0) {
-//     cityName.textContent = e.target.value;
-//   } else {
-//     cityName.textContent = 'Seattle';
-//   }
-// };
-// input.oninput = updateCityName;
+const getCurrentTemp = () => parseInt(currentTempElement.textContent);
 
 const resetCityName = () => {
   cityName.textContent = 'Seattle';
@@ -61,12 +50,10 @@ const updateDisplay = () => {
 
 const increaseTemp = () => {
   currentTempElement.textContent = `${getCurrentTemp() + 1}`;
-  updateDisplay();
 };
 
 const decreaseTemp = () => {
   currentTempElement.textContent = `${getCurrentTemp() - 1}`;
-  updateDisplay();
 };
 
 const skyMapping = {
@@ -81,14 +68,15 @@ const updateSky = () => {
 };
 
 const registerEventHandlers = () => {
-  updateDisplay();
   const increaseButton = document.getElementById('increase-button');
   const decreaseButton = document.getElementById('decrease-button');
   const resetButton = document.getElementById('reset-button');
   const form = document.getElementById('form');
 
   increaseButton.addEventListener('click', increaseTemp);
+  increaseButton.addEventListener('click', updateDisplay);
   decreaseButton.addEventListener('click', decreaseTemp);
+  decreaseButton.addEventListener('click', updateDisplay);
   resetButton.addEventListener('click', resetCityName);
   form.addEventListener('submit', submitCity);
   skyOptionElement.addEventListener('change', updateSky);
