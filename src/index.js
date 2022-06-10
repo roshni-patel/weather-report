@@ -8,14 +8,30 @@ const getCurrentTemp = () => parseInt(currentTempElement.textContent);
 const input = document.querySelector('input');
 const cityName = document.getElementById('city-name');
 
-const updateCityName = (e) => {
-  if (e.target.value.length > 0) {
-    cityName.textContent = e.target.value;
-  } else {
-    cityName.textContent = 'Seattle';
-  }
+// We don't need this since we decided we only want the city name to display once we submit
+// const updateCityName = (e) => {
+//   if (e.target.value.length > 0) {
+//     cityName.textContent = e.target.value;
+//   } else {
+//     cityName.textContent = 'Seattle';
+//   }
+// };
+// input.oninput = updateCityName;
+
+const resetCityName = () => {
+  cityName.textContent = 'Seattle';
+  clearInput();
 };
-input.oninput = updateCityName;
+
+const clearInput = () => {
+  input.value = '';
+};
+
+const submitCity = (event) => {
+  cityName.textContent = input.value;
+  clearInput();
+  event.preventDefault();
+};
 
 const updateDisplay = () => {
   const currentTemp = getCurrentTemp();
@@ -56,8 +72,12 @@ const registerEventHandlers = () => {
   updateDisplay();
   const increaseButton = document.getElementById('increase-button');
   const decreaseButton = document.getElementById('decrease-button');
+  const resetButton = document.getElementById('reset-button');
+  const form = document.getElementById('form');
   increaseButton.addEventListener('click', increaseTemp);
   decreaseButton.addEventListener('click', decreaseTemp);
+  resetButton.addEventListener('click', resetCityName);
+  form.addEventListener('submit', submitCity);
 };
 
 document.addEventListener('DOMContentLoaded', registerEventHandlers);

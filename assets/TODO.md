@@ -46,9 +46,9 @@ Hint: This feature requires you to grab the value of the text input element.
 - [] See Wave 5 hints (next tab)
 - [] Make one commit
 ### Wave 6
-- [] A clickable element to reset the city name
-- [] Make a button
-- [] When a user clicks on this button, the city name will be set to a default name.
-- [] This reset button should also affect the city name text input element.
-- [] The text input element's value should be set to the default city name, or become blank.
-- [] Make one commit
+- [x] A clickable element to reset the city name
+- [x] Make a button
+- [x] When a user clicks on this button, the city name will be set to a default name.
+- [x] This reset button should also affect the city name text input element.
+- [x] The text input element's value should be set to the default city name, or become blank.
+- [x] Make one commit
