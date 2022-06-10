@@ -9,7 +9,11 @@ const input = document.querySelector('input');
 const cityName = document.getElementById('city-name');
 
 const updateCityName = (e) => {
-  cityName.textContent = e.target.value;
+  if (e.target.value.length > 0) {
+    cityName.textContent = e.target.value;
+  } else {
+    cityName.textContent = 'Seattle';
+  }
 };
 input.oninput = updateCityName;
 
