@@ -38,13 +38,13 @@ Hint: This feature requires you to grab the value of the text input element.
 - [x] Check to make sure VS code error doesn't happen (see other tab)
 - [x] Make one commit
 ## Wave 5
-- [] A \<select> dropdown element to set the sky type
-- [] Changing the sky should replace the existing sky. 
-- [] There should only be one visible sky at a time.
-- [] An element that displays a sky
-- [] There must be at least four skies
-- [] See Wave 5 hints (next tab)
-- [] Make one commit
+- [x] A \<select> dropdown element to set the sky type
+- [x] Changing the sky should replace the existing sky. 
+- [x] There should only be one visible sky at a time.
+- [x] An element that displays a sky
+- [x] There must be at least four skies
+- [x] See Wave 5 hints (next tab)
+- [x] Make one commit
 ### Wave 6
 - [x] A clickable element to reset the city name
 - [x] Make a button
@@ -52,3 +52,11 @@ Hint: This feature requires you to grab the value of the text input element.
 - [x] This reset button should also affect the city name text input element.
 - [x] The text input element's value should be set to the default city name, or become blank.
 - [x] Make one commit
+
+### EXTRA FEATURES:
+- [x] Deployed proxy backend server to Heroku: https://weather-report-backend.herokuapp.com/
+- [x] Get current location button to get current city if browser permits
+- [x] Display current date and weather info of displayed city
+- [ ] Options to choose either C or F
+- [ ] Add CSS 
+- [ ] Deploy to Github Pages
