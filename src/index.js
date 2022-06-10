@@ -1,7 +1,8 @@
 'use strict';
 
 const currentTempElement = document.getElementById('current-temp');
-const landscape = document.getElementById('landscape');
+const landscapeElement = document.getElementById('landscape');
+const weatherGardenElement = document.getElementById('weather-garden');
 const skyOptionElement = document.getElementById('sky-select');
 const input = document.querySelector('input');
 const cityName = document.getElementById('city-name');
@@ -23,28 +24,23 @@ const submitCity = (event) => {
   event.preventDefault();
 };
 
-const updateDisplay = () => {
+const updateDisplay = (tempTextColor, gardenBgColor, landscapeText) => {
+  currentTempElement.style.color = tempTextColor;
+  weatherGardenElement.style.backgroundColor = gardenBgColor;
+  landscapeElement.textContent = landscapeText;
+};
+const updateAll = () => {
   const currentTemp = getCurrentTemp();
   if (currentTemp >= 80) {
-    currentTempElement.style.color = 'red';
-    currentTempElement.style.background = 'white';
-    landscape.textContent = '🌵__🐍_🦂_🌵🌵__🐍_🏜_🦂';
+    updateDisplay('red', 'red', '🌵__🐍_🦂_🌵🌵__🐍_🏜_🦂');
   } else if (currentTemp >= 70) {
-    currentTempElement.style.color = 'orange';
-    currentTempElement.style.background = 'white';
-    landscape.textContent = '🌸🌿🌼__🌷🌻🌿_☘️🌱_🌻🌷';
+    updateDisplay('orange', 'yellow', '🌸🌿🌼__🌷🌻🌿_☘️🌱_🌻🌷');
   } else if (currentTemp >= 60) {
-    currentTempElement.style.color = 'yellow';
-    currentTempElement.style.background = 'teal';
-    landscape.textContent = '🌾🌾_🍃_🪨__🛤_🌾🌾🌾_🍃';
+    updateDisplay('yellow', 'pink', '🌾🌾_🍃_🪨__🛤_🌾🌾🌾_🍃');
   } else if (currentTemp >= 50) {
-    currentTempElement.style.color = 'green';
-    currentTempElement.style.background = 'white';
-    landscape.textContent = '🌲🌲⛄️🌲⛄️🍂🌲🍁🌲🌲⛄️🍂🌲';
+    updateDisplay('green', 'teal', '🌲🌲⛄️🌲⛄️🍂🌲🍁🌲🌲⛄️🍂🌲');
   } else {
-    currentTempElement.style.color = 'teal';
-    currentTempElement.style.background = 'white';
-    landscape.textContent = '🌲🌲⛄️🌲⛄️🍂🌲🍁🌲🌲⛄️🍂🌲';
+    updateDisplay('teal', 'grey', '🌲🌲⛄️🌲⛄️🍂🌲🍁🌲🌲⛄️🍂🌲');
   }
 };
 
@@ -74,9 +70,9 @@ const registerEventHandlers = () => {
   const form = document.getElementById('form');
 
   increaseButton.addEventListener('click', increaseTemp);
-  increaseButton.addEventListener('click', updateDisplay);
+  increaseButton.addEventListener('click', updateAll);
   decreaseButton.addEventListener('click', decreaseTemp);
-  decreaseButton.addEventListener('click', updateDisplay);
+  decreaseButton.addEventListener('click', updateAll);
   resetButton.addEventListener('click', resetCityName);
   form.addEventListener('submit', submitCity);
   skyOptionElement.addEventListener('change', updateSky);
