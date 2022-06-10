@@ -67,11 +67,44 @@ const updateSky = () => {
   document.getElementById('sky').innerText = skyMapping[skyOptionElement.value];
 };
 
+const convertKToF = (kelvinTemp) => {
+  return Math.floor((kelvinTemp * 9) / 5 - 459.67);
+};
+
+const getLatLongFromCityName = async () => {
+  const currentCityName = cityName.textContent;
+  const response = await axios.get(
+    `https://weather-report-backend.herokuapp.com/location?q=${currentCityName}}`
+  );
+
+  const lat = response.data[0].lat;
+  const lon = response.data[0].lon;
+
+  return {
+    lat: lat,
+    lon: lon,
+  };
+};
+
+const getRealTimeTemp = async () => {
+  const { lat, lon } = await getLatLongFromCityName();
+
+  axios
+    .get(
+      `https://weather-report-backend.herokuapp.com/weather?lat=${lat}&lon=${lon}`
+    )
+    .then((response) => {
+      const kelvinTemp = response.data.current.temp;
+      currentTempElement.textContent = convertKToF(kelvinTemp);
+    });
+};
+
 const registerEventHandlers = () => {
   const increaseButton = document.getElementById('increase-button');
   const decreaseButton = document.getElementById('decrease-button');
   const resetButton = document.getElementById('reset-button');
   const form = document.getElementById('form');
+  const getRealTimeTempButton = document.getElementById('get-realtime-temp');
 
   increaseButton.addEventListener('click', increaseTemp);
   increaseButton.addEventListener('click', updateDisplay);
@@ -80,6 +113,7 @@ const registerEventHandlers = () => {
   resetButton.addEventListener('click', resetCityName);
   form.addEventListener('submit', submitCity);
   skyOptionElement.addEventListener('change', updateSky);
+  getRealTimeTempButton.addEventListener('click', getRealTimeTemp);
 };
 
 document.addEventListener('DOMContentLoaded', registerEventHandlers);
