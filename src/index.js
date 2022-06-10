@@ -197,8 +197,8 @@ const registerEventHandlers = () => {
   decreaseButton.addEventListener('click', updateAll);
   resetButton.addEventListener('click', resetCityName);
   form.addEventListener('submit', submitCity);
-  form.addEventListener('submit', updateRealTimeInfo),
-    skyOptionElement.addEventListener('change', updateSky);
+  form.addEventListener('submit', updateRealTimeInfo);
+  skyOptionElement.addEventListener('change', updateSky);
   getRealTimeTempButton.addEventListener('click', getRealTimeTemp);
   currentCityButton.addEventListener('click', getCurrentCity);
 };
