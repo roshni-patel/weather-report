@@ -172,13 +172,16 @@ const displayRealTemp = async () => {
 };
 
 // Display live date
-displayCurrentDateTime();
-displayRealTemp();
-
+const updateRealTimeInfo = () => {
+  displayCurrentDateTime();
+  displayRealTemp();
+  (async () => {
+    await displayCurrentWeatherDescription();
+  })();
+};
 // Display live temp & weather description
-(async () => {
-  await displayCurrentWeatherDescription();
-})();
+
+updateRealTimeInfo();
 
 const registerEventHandlers = () => {
   const increaseButton = document.getElementById('increase-button');
@@ -194,7 +197,8 @@ const registerEventHandlers = () => {
   decreaseButton.addEventListener('click', updateAll);
   resetButton.addEventListener('click', resetCityName);
   form.addEventListener('submit', submitCity);
-  skyOptionElement.addEventListener('change', updateSky);
+  form.addEventListener('submit', updateRealTimeInfo),
+    skyOptionElement.addEventListener('change', updateSky);
   getRealTimeTempButton.addEventListener('click', getRealTimeTemp);
   currentCityButton.addEventListener('click', getCurrentCity);
 };
