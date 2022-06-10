@@ -2,6 +2,7 @@
 
 const currentTempElement = document.getElementById('current-temp');
 const landscape = document.getElementById('landscape');
+const skyOptionElement = document.getElementById('sky-select');
 
 const getCurrentTemp = () => parseInt(currentTempElement.textContent);
 
@@ -68,16 +69,29 @@ const decreaseTemp = () => {
   updateDisplay();
 };
 
+const skyMapping = {
+  Sunny: '☀️☁️ ☀️☁️ ☀️ ☁️☀️ ☁️ ☀️ ☁️',
+  Cloudy: '☁️☁️ ☁️ ☁️☁️ ☁️ 🌤 ☁️ ☁️☁️',
+  Rainy: '🌧🌈⛈🌧🌧💧⛈🌧🌦🌧💧🌧🌧',
+  Snowy: '🌨❄️🌨🌨❄️❄️🌨❄️🌨❄️❄️🌨🌨',
+};
+
+const updateSky = () => {
+  document.getElementById('sky').innerText = skyMapping[skyOptionElement.value];
+};
+
 const registerEventHandlers = () => {
   updateDisplay();
   const increaseButton = document.getElementById('increase-button');
   const decreaseButton = document.getElementById('decrease-button');
   const resetButton = document.getElementById('reset-button');
   const form = document.getElementById('form');
+
   increaseButton.addEventListener('click', increaseTemp);
   decreaseButton.addEventListener('click', decreaseTemp);
   resetButton.addEventListener('click', resetCityName);
   form.addEventListener('submit', submitCity);
+  skyOptionElement.addEventListener('change', updateSky);
 };
 
 document.addEventListener('DOMContentLoaded', registerEventHandlers);
