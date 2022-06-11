@@ -57,6 +57,6 @@ Hint: This feature requires you to grab the value of the text input element.
 - [x] Deployed proxy backend server to Heroku: https://weather-report-backend.herokuapp.com/
 - [x] Get current location button to get current city if browser permits
 - [x] Display current date and weather info of displayed city
-- [ ] Options to choose either C or F
+- [x] Options to choose either C or F
 - [ ] Add CSS 
 - [ ] Deploy to Github Pages

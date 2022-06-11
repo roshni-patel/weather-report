@@ -9,7 +9,14 @@ const cityName = document.getElementById('city-name');
 const todayDateElement = document.getElementById('today-date');
 const liveTempElement = document.getElementById('live-temp');
 const weatherDescription = document.getElementById('weather-description');
+const celsiusButton = document.getElementById('celsius');
+const fahrenheitButton = document.getElementById('fahrenheit');
+fahrenheitButton.disabled = true;
+currentTempElement.textContent = `${
+  currentTempElement.textContent
+} ${String.fromCharCode(176)}F`;
 
+let currentTempScale = 'Fahrenheit';
 const getCurrentTemp = () => parseInt(currentTempElement.textContent);
 
 const resetCityName = () => {
@@ -168,7 +175,9 @@ const displayCurrentWeatherDescription = async () => {
 const displayRealTemp = async () => {
   const realWeatherInfo = await getRealWeatherInfo();
   const kelvinTemp = realWeatherInfo.temp;
-  liveTempElement.textContent = convertKToF(kelvinTemp);
+  liveTempElement.textContent = `${convertKToF(
+    kelvinTemp
+  )} ${String.fromCharCode(176)}F`;
 };
 
 // Display live date
@@ -182,6 +191,26 @@ const updateRealTimeInfo = () => {
 // Display live temp & weather description
 
 updateRealTimeInfo();
+
+const convertToCelsius = () => {
+  const temp = liveTempElement.textContent.substring(0, 2);
+  celsiusButton.disabled = true;
+  fahrenheitButton.disabled = false;
+  currentTempScale = 'Celsius';
+  const celsius = Math.round((5 / 9) * (temp - 32));
+  liveTempElement.textContent = `${celsius} ${String.fromCharCode(176)}C`;
+  currentTempElement.textContent = `${celsius} ${String.fromCharCode(176)}C`;
+};
+
+const convertToFahrenheit = () => {
+  const temp = liveTempElement.textContent.substring(0, 2);
+  fahrenheitButton.disabled = true;
+  celsiusButton.disabled = false;
+  currentTempScale = 'Fahrenheit';
+  const fahrenheit = Math.round((temp * 9) / 5 + 32);
+  liveTempElement.textContent = `${fahrenheit} ${String.fromCharCode(176)}F`;
+  currentTempElement.textContent = `${fahrenheit} ${String.fromCharCode(176)}F`;
+};
 
 const registerEventHandlers = () => {
   const increaseButton = document.getElementById('increase-button');
@@ -201,6 +230,8 @@ const registerEventHandlers = () => {
   skyOptionElement.addEventListener('change', updateSky);
   getRealTimeTempButton.addEventListener('click', getRealTimeTemp);
   currentCityButton.addEventListener('click', getCurrentCity);
+  celsiusButton.addEventListener('click', convertToCelsius);
+  fahrenheitButton.addEventListener('click', convertToFahrenheit);
 };
 
 document.addEventListener('DOMContentLoaded', registerEventHandlers);
