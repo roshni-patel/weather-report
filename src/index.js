@@ -1,65 +1,87 @@
 'use strict';
 
-const currentTempElement = document.getElementById('current-temp');
-const landscapeElement = document.getElementById('landscape');
-const weatherGardenElement = document.getElementById('weather-garden');
-const skyOptionElement = document.getElementById('sky-select');
-const input = document.querySelector('input');
-const cityName = document.getElementById('city-name');
-const todayDateElement = document.getElementById('today-date');
-const liveTempElement = document.getElementById('live-temp');
-const weatherDescription = document.getElementById('weather-description');
-const celsiusButton = document.getElementById('celsius');
-const fahrenheitButton = document.getElementById('fahrenheit');
-fahrenheitButton.disabled = true;
-currentTempElement.textContent = `${
-  currentTempElement.textContent
-} ${String.fromCharCode(176)}F`;
-
-let currentTempScale = 'Fahrenheit';
-const getCurrentTemp = () => parseInt(currentTempElement.textContent);
-
-const resetCityName = () => {
-  cityName.textContent = 'Seattle';
-  clearInput();
+// default state
+const state = {
+  playgroundTemp: 60,
+  displayedLiveTemp: null,
+  liveTempInK: 295,
+  liveweather: null,
+  unit: 'F',
+  cityName: 'Seattle',
 };
 
-const clearInput = () => {
-  input.value = '';
+// --- HTML DOM Elements ---
+const playgroundTempElement = document.getElementById('playground-temp');
+const cityName = document.getElementById('city-name');
+const liveTempElement = document.getElementById('live-temp');
+const celsiusButton = document.getElementById('celsius');
+const fahrenheitButton = document.getElementById('fahrenheit');
+const skyOptionElement = document.getElementById('sky-select');
+
+fahrenheitButton.disabled = true;
+let currentTempScale = 'Fahrenheit';
+
+// --- Playground Temp --- //
+const updatePlaygroundTemp = (change) => (state.playgroundTemp += change);
+
+const displayPlaygroundTemp = () => {
+  playgroundTempElement.textContent = `${
+    state.playgroundTemp
+  } ${String.fromCharCode(176)} ${state.unit}`;
+};
+
+const updatePlaygroundRealTemp = () => {
+  getRealWeatherInfo();
+  displayLiveTemp();
+  state.playgroundTemp = state.displayedLiveTemp;
+  displayPlaygroundTemp();
+};
+
+// -- Input for city name -- //
+
+const displayCityName = () => {
+  document.getElementById('city-name').textContent = state.city;
+};
+
+const resetCityName = () => {
+  state.cityName = 'Seattle';
+  displayCityName();
 };
 
 const submitCity = (event) => {
-  cityName.textContent = input.value;
-  clearInput();
+  const input = document.querySelector('input');
+  if (input.value) {
+    state.city = input.value;
+  }
+  input.value = '';
   event.preventDefault();
+  displayCityName();
 };
 
-const updateDisplay = (tempTextColor, gardenBgColor, landscapeText) => {
-  currentTempElement.style.color = tempTextColor;
+// -- Update playground text color, landscape, garden bg color --
+const updatePlayground = (tempTextColor, gardenBgColor, landscapeText) => {
+  const weatherGardenElement = document.getElementById('weather-garden');
+  const landscapeElement = document.getElementById('landscape');
+
+  playgroundTempElement.style.color = tempTextColor;
   weatherGardenElement.style.backgroundColor = gardenBgColor;
   landscapeElement.textContent = landscapeText;
 };
+
 const updateAll = () => {
-  const currentTemp = getCurrentTemp();
+  const currentTemp = state.temp;
+  displayPlaygroundTemp();
   if (currentTemp >= 80) {
-    updateDisplay('red', 'red', '🌵__🐍_🦂_🌵🌵__🐍_🏜_🦂');
+    updatePlayground('red', 'red', '🌵__🐍_🦂_🌵🌵__🐍_🏜_🦂');
   } else if (currentTemp >= 70) {
-    updateDisplay('orange', 'yellow', '🌸🌿🌼__🌷🌻🌿_☘️🌱_🌻🌷');
+    updatePlayground('orange', 'yellow', '🌸🌿🌼__🌷🌻🌿_☘️🌱_🌻🌷');
   } else if (currentTemp >= 60) {
-    updateDisplay('yellow', 'pink', '🌾🌾_🍃_🪨__🛤_🌾🌾🌾_🍃');
+    updatePlayground('yellow', 'pink', '🌾🌾_🍃_🪨__🛤_🌾🌾🌾_🍃');
   } else if (currentTemp >= 50) {
-    updateDisplay('green', 'teal', '🌲🌲⛄️🌲⛄️🍂🌲🍁🌲🌲⛄️🍂🌲');
+    updatePlayground('green', 'teal', '🌲🌲⛄️🌲⛄️🍂🌲🍁🌲🌲⛄️🍂🌲');
   } else {
-    updateDisplay('teal', 'grey', '🌲🌲⛄️🌲⛄️🍂🌲🍁🌲🌲⛄️🍂🌲');
+    updatePlayground('teal', 'grey', '🌲🌲⛄️🌲⛄️🍂🌲🍁🌲🌲⛄️🍂🌲');
   }
-};
-
-const increaseTemp = () => {
-  currentTempElement.textContent = `${getCurrentTemp() + 1}`;
-};
-
-const decreaseTemp = () => {
-  currentTempElement.textContent = `${getCurrentTemp() - 1}`;
 };
 
 const skyMapping = {
@@ -78,45 +100,31 @@ const convertKToF = (kelvinTemp) => {
 };
 
 const getLatLongFromCityName = async () => {
-  const currentCityName = cityName.textContent;
-  const response = await axios.get(
-    `https://weather-report-backend.herokuapp.com/location?q=${currentCityName}}`
-  );
+  try {
+    const currentCityName = cityName.textContent;
+    const response = await axios.get(
+      `https://weather-report-backend.herokuapp.com/location?q=${currentCityName}`
+    );
 
-  const lat = response.data[0].lat;
-  const lon = response.data[0].lon;
-
-  return {
-    lat: lat,
-    lon: lon,
-  };
+    return [response.data[0].lat, response.data[0].lon];
+  } catch (error) {
+    console.log(error);
+    console.log('error in getLatLongFromCityName!');
+  }
 };
 
 const getRealWeatherInfo = async () => {
-  const { lat, lon } = await getLatLongFromCityName();
+  try {
+    const [lat, lon] = await getLatLongFromCityName();
 
-  const response = await axios.get(
-    `https://weather-report-backend.herokuapp.com/weather?lat=${lat}&lon=${lon}`
-  );
-  return response.data.current;
-};
-const getRealTimeTemp = async () => {
-  const realWeatherInfo = await getRealWeatherInfo();
-  const kelvinTemp = realWeatherInfo.temp;
-  currentTempElement.textContent = convertKToF(kelvinTemp);
-};
-
-const getCurrentCity = () => {
-  // using HTML Geolocation API to get current location if browser permits
-  navigator.geolocation.getCurrentPosition(displayCurrentCoordinates);
-};
-
-const displayCurrentCoordinates = async (position) => {
-  const lat = position.coords.latitude;
-  const lon = position.coords.longitude;
-  const city = await getCityFromLatLon(lat, lon);
-  if (city) {
-    cityName.textContent = `${city}`;
+    const response = await axios.get(
+      `https://weather-report-backend.herokuapp.com/weather?lat=${lat}&lon=${lon}`
+    );
+    state.liveTempInK = response.data.current.temp;
+    state.liveweather = response.data.current.weather[0].description;
+  } catch (error) {
+    console.log(error);
+    console.log('error in getRealWeatherInfo!');
   }
 };
 
@@ -133,83 +141,92 @@ const getCityFromLatLon = async (lat, lon) => {
   }
 };
 
-// Get current Date & Time
-const displayCurrentDateTime = () => {
-  const today = new Date();
-  const dayList = [
-    'Sunday',
-    'Monday',
-    'Tuesday',
-    'Wednesday ',
-    'Thursday',
-    'Friday',
-    'Saturday',
-  ];
-  const monthList = [
-    'January',
-    'February',
-    'March',
-    'April',
-    'May',
-    'June',
-    'July',
-    'August',
-    'September',
-    'October',
-    'November',
-    'December',
-  ];
-  const day = dayList[today.getDay()];
-  const year = today.getFullYear();
-  const month = monthList[today.getMonth()];
-  const date = today.getDate();
-  todayDateElement.textContent = `${day}, ${month}/${date}/${year}`;
+const getCurrentCity = () => {
+  // using HTML Geolocation API to get current location if browser permits
+  navigator.geolocation.getCurrentPosition(displayCurrentCity);
 };
 
-const displayCurrentWeatherDescription = async () => {
-  const currrentWeatherDescription = await getRealWeatherInfo();
-  weatherDescription.textContent =
-    currrentWeatherDescription['weather'][0]['description'];
+const displayCurrentCity = async (position) => {
+  const lat = position.coords.latitude;
+  const lon = position.coords.longitude;
+  const city = await getCityFromLatLon(lat, lon);
+  if (city) {
+    state.cityName = `${city}`;
+  }
+  displayCityName();
 };
 
-const displayRealTemp = async () => {
-  const realWeatherInfo = await getRealWeatherInfo();
-  const kelvinTemp = realWeatherInfo.temp;
-  liveTempElement.textContent = `${convertKToF(
-    kelvinTemp
-  )} ${String.fromCharCode(176)}F`;
+// --- Display Live Date Time ---
+const getTodayDateAsString = () => {
+  const utcDateTime = new Date();
+  const pstDateTime = utcDateTime.toLocaleString('en-US', {
+    timeZone: 'America/Los_Angeles',
+    dateStyle: 'full',
+    timeStyle: 'long',
+  });
+  return pstDateTime;
 };
 
-// Display live date
-const updateRealTimeInfo = () => {
-  displayCurrentDateTime();
-  displayRealTemp();
-  (async () => {
-    await displayCurrentWeatherDescription();
-  })();
+const displayDateTime = () => {
+  const todayDateElement = document.getElementById('today-date');
+  const currentTimeElement = document.getElementById('current-time');
+  const dateTimeString = getTodayDateAsString();
+  const [date, time] = dateTimeString.split(' at ');
+  todayDateElement.textContent = date;
+  currentTimeElement.textContent = time;
+  updateDateTime();
 };
-// Display live temp & weather description
 
-updateRealTimeInfo();
+const updateDateTime = () => {
+  setTimeout(displayDateTime, 1000);
+};
+
+//--- Display live weather info ---
+
+const displayLiveWeatherDescription = () => {
+  getRealWeatherInfo();
+  const weatherInfoElement = document.getElementById('weather-description');
+  weatherInfoElement.textContent = state.liveweather;
+};
+
+const displayLiveTemp = async () => {
+  state.displayedLiveTemp =
+    state.unit === 'F'
+      ? convertKToF(state.liveTempInK)
+      : convertKToC(state.liveTempInK);
+  const degreeSymbol = String.fromCharCode(176);
+  liveTempElement.textContent = `${state.displayedLiveTemp} ${degreeSymbol} ${state.unit}`;
+};
+
+const displayWeatherInfo = () => {
+  displayLiveWeatherDescription();
+  getRealWeatherInfo();
+  displayLiveTemp();
+  displayPlaygroundTemp();
+};
+
+const convertFToC = (tempF) => Math.round((5 / 9) * (tempF - 32));
+const convertCToF = (tempC) => Math.round((tempC * 9) / 5 + 32);
+const convertKToC = (tempK) => Math.round(tempK - 273.15);
 
 const convertToCelsius = () => {
-  const temp = liveTempElement.textContent.substring(0, 2);
   celsiusButton.disabled = true;
   fahrenheitButton.disabled = false;
-  currentTempScale = 'Celsius';
-  const celsius = Math.round((5 / 9) * (temp - 32));
-  liveTempElement.textContent = `${celsius} ${String.fromCharCode(176)}C`;
-  currentTempElement.textContent = `${celsius} ${String.fromCharCode(176)}C`;
+  state.unit = 'C';
+  state.playgroundTemp = convertFToC(state.playgroundTemp);
+  state.displayedLiveTemp = convertKToC(state.liveTempInK);
+  displayPlaygroundTemp();
+  displayLiveTemp();
 };
 
 const convertToFahrenheit = () => {
-  const temp = liveTempElement.textContent.substring(0, 2);
   fahrenheitButton.disabled = true;
   celsiusButton.disabled = false;
-  currentTempScale = 'Fahrenheit';
-  const fahrenheit = Math.round((temp * 9) / 5 + 32);
-  liveTempElement.textContent = `${fahrenheit} ${String.fromCharCode(176)}F`;
-  currentTempElement.textContent = `${fahrenheit} ${String.fromCharCode(176)}F`;
+  state.unit = 'F';
+  state.playgroundTemp = convertCToF(state.playgroundTemp);
+  state.displayedLiveTemp = convertKToF(state.liveTempInK);
+  displayPlaygroundTemp();
+  displayLiveTemp();
 };
 
 const registerEventHandlers = () => {
@@ -220,18 +237,23 @@ const registerEventHandlers = () => {
   const getRealTimeTempButton = document.getElementById('get-realtime-temp');
   const currentCityButton = document.getElementById('get-current-city-button');
 
-  increaseButton.addEventListener('click', increaseTemp);
+  increaseButton.addEventListener('click', () => updatePlaygroundTemp(1));
   increaseButton.addEventListener('click', updateAll);
-  decreaseButton.addEventListener('click', decreaseTemp);
+  decreaseButton.addEventListener('click', () => updatePlaygroundTemp(-1));
   decreaseButton.addEventListener('click', updateAll);
   resetButton.addEventListener('click', resetCityName);
   form.addEventListener('submit', submitCity);
-  form.addEventListener('submit', updateRealTimeInfo);
+  form.addEventListener('submit', displayWeatherInfo);
   skyOptionElement.addEventListener('change', updateSky);
-  getRealTimeTempButton.addEventListener('click', getRealTimeTemp);
+  getRealTimeTempButton.addEventListener('click', updatePlaygroundRealTemp);
   currentCityButton.addEventListener('click', getCurrentCity);
+  currentCityButton.addEventListener('click', displayWeatherInfo);
   celsiusButton.addEventListener('click', convertToCelsius);
   fahrenheitButton.addEventListener('click', convertToFahrenheit);
 };
 
+updateDateTime();
+if (state.liveweather === null) {
+  displayWeatherInfo();
+}
 document.addEventListener('DOMContentLoaded', registerEventHandlers);

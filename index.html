@@ -25,22 +25,23 @@
                 </form>
             </div>
             <div id="temperature-conversion" class="col-3">
-                <button type="button" id="celsius">&#8451;</button>
-                <button type="button" id="fahrenheit">&#8457;</button>
+                <button type="button" id="celsius" value="C">&#8451;</button>
+                <button type="button" id="fahrenheit" value="F">&#8457;</button>
             </div>
         </div>
     </div>
     <div class="container">
         <div id="city-info">
             <h3 id="city-name">Seattle</h3>
-            <p id="today-date">Current Date & Time</p>
+            <p id="today-date"></p>
+            <p id="current-time"></p>
             <p><span id="live-temp"></span></p> 
-            <p id="weather-description">Currently: <span id="live-weather">Weather Description</span></p>
+            <p>Currently: <span id="weather-description"></span></p>
         </div>
     </div>
     <div id="weather-garden-playground">
         <div id="get-temperature">
-            <h3><span id="current-temp">70</span></h3>
+            <h3><span id="playground-temp"></span></h3>
             <button id="increase-button"><span class="fas fa-arrow-up"></span></button>
             <button id="decrease-button"><span class="fas fa-arrow-down"></span></button>
             <button id="get-realtime-temp" type="button">Get Realtime Temp</button>
