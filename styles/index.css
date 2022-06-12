@@ -38,8 +38,12 @@ footer {
 .box {
   border: teal 3px solid !important;
   border-radius: 15px;
+  background-color: beige;
 }
 
+#weather-garden-playground {
+  border: black 1px solid !important;
+}
 #weather-garden {
   background-color: teal;
 }
