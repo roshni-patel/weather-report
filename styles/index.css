@@ -1,0 +1,50 @@
+html {
+  position: relative;
+  min-height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  /* Margin bottom by footer height */
+  margin-bottom: 60px;
+  font-family: "Titillium Web", sans-serif !important;
+  color: #636363;
+}
+
+header {
+    background-color: teal;
+}
+
+header *{
+    font-size: 20px !important;
+    color: white !important;
+}
+
+footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  /* Set the fixed height */
+  height: 50px;
+  background-color: #f5f5f5;
+}
+
+.container {
+  max-width: 600px;
+  margin: 40px auto;
+}
+
+.box {
+  border: teal 3px solid !important;
+  border-radius: 15px;
+}
+
+#weather-garden {
+  background-color: teal;
+}
+
+#weather-garden-text {
+  font-weight: bold !important;
+  color: white !important;
+}

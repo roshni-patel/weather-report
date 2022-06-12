@@ -3,71 +3,92 @@
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0 maximum-scale=1, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no">
     <link href="./styles/index.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Titillium+Web:ital,wght@0,200;1,200;1,400&display=swap" rel="stylesheet">
     <title>Weather Report</title>
 </head>
 <body>
-    <div id="top-container" class="container">
-        <div class="row">
-            <div id="city-search-bar" class="col-9">
-                <form id="form">
-                    <input type="text" id="city-search-box" placeholder="Type a city" autocomplete="off"/>
-                    <button type="submit">
-                        <i class="fas fa-search"></i>
-                    </button>
-                    <button type="button" id="get-current-city-button">
-                        <i class="fas fa-location-arrow"></i>
-                    </button>
-                    <button type="button" id="reset-button">Reset</button>
-                </form>
+    <header class="nav-bar d-flex flex-row justify-content-between align-items-center border mb-3 p-1">
+        <div>Weather Report Playground</div>
+        <div>Coded with &#128151;</div>
+        <div class="btn" role="button" href="https://github.com/roshni-patel/weather-report">Open-source code</d>
+    </header>
+    <main class="container">
+        <div class="box m-3 p-3"> 
+            <div class="row mb-3 justify-content-md-center">
+                <div id="city-search-bar" class="col-10">
+                    <form id="form">
+                        <input type="text" id="city-search-box" placeholder="Type a city" autocomplete="off"/>
+                        <button type="submit">
+                            <i class="fas fa-search"></i>
+                        </button>
+                        <button type="button" id="get-current-city-button">
+                            <i class="fas fa-location-arrow"></i>
+                        </button>
+                        <button type="button" id="reset-button">Reset</button>
+                    </form>
+                </div>
+                <div id="temperature-conversion" class="col-2">
+                    <button type="button" id="celsius" value="C">&#8451;</button>
+                    <button type="button" id="fahrenheit" value="F">&#8457;</button>
+                </div>
             </div>
-            <div id="temperature-conversion" class="col-3">
-                <button type="button" id="celsius" value="C">&#8451;</button>
-                <button type="button" id="fahrenheit" value="F">&#8457;</button>
+            <div class="row g-2">
+                <div class="col-4">
+                    <div id="city-info" class="p-3">
+                        <p id="city-name" class="display-4">Seattle</p>
+                        <p id="today-date"></p>
+                        <p id="current-time"></p>
+                        <p><span id="live-temp" class="display-6"></span></p> 
+                        <p>Currently: <span id="weather-description"></span></p>
+                    </div>
+                </div>
+                <div id="weather-garden-playground" class="col-8 border rounded">
+                    <div class="row g-2 m-2 p-2">
+                            <div id="get-temperature" class="col d-flex flex-row">
+                                <button id="get-realtime-temp" type="button">Get Live Temperature</button>
+                                <div id="playground-temp" class="display-6 m1"></div>
+                                <div>
+                                    <div class="btn btn-secondary m-1" id="increase-button" role="button"><span class="fas fa-arrow-up"></span></div>
+                                    <div class="btn btn-secondary m-1" id="decrease-button" role="button"><span class="fas fa-arrow-down"></span></div>
+                                </div>
+                            </div>
+                            <div id="sky-dropdown" class="col d-flex flex-row m-5">
+                                <div>SKY</div>
+                                <div>
+                                    <label for="sky-select"></label>
+                                    <select name="sky" id="sky-select">
+                                        <option value="Cloudy">Cloudy</option>
+                                        <option value="Rainy">Rainy</option>
+                                        <option value="Sunny">Sunny</option>
+                                        <option value="Snowy">Snowy</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col"></div>
+                            <div id="weather-garden" class="col-6 border rounded text-center m-3">
+                                <div><p id="weather-garder-text">WEATHER GARDEN</p></div>
+                                <div><p id="sky">🌧🌈⛈🌧🌧💧⛈🌧🌦🌧💧🌧🌧</p></div>
+                                <div><p id="landscape">🌸🌿🌼__🌷🌻🌿_☘️🌱_🌻🌷</p></div>
+                            </div>
+                            <div class="col"></div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
-    <div class="container">
-        <div id="city-info">
-            <h3 id="city-name">Seattle</h3>
-            <p id="today-date"></p>
-            <p id="current-time"></p>
-            <p><span id="live-temp"></span></p> 
-            <p>Currently: <span id="weather-description"></span></p>
+    </main>
+    <footer>
+        <div class="text-muted text-center">
+            <p class="p-1">&#169;2022 <a href="https://www.linkedin.com/in/roshni-patel/">Roshni Patel</a> & <a href="www.linkedin.com/in/thaimynguyen">Amy Nguyen</a> | Ada Developers Academy Cohort 17</p>
         </div>
-    </div>
-    <div id="weather-garden-playground">
-        <div id="get-temperature">
-            <h3><span id="playground-temp"></span></h3>
-            <button id="increase-button"><span class="fas fa-arrow-up"></span></button>
-            <button id="decrease-button"><span class="fas fa-arrow-down"></span></button>
-            <button id="get-realtime-temp" type="button">Get Realtime Temp</button>
-        </div>
-        <div id="sky-dropdown">
-            <h3>SKY</h3>
-            <label for="sky-select"></label>
-            <select name="sky" id="sky-select">
-                <option value="Cloudy">Cloudy</option>
-                <option value="Rainy">Rainy</option>
-                <option value="Sunny">Sunny</option>
-                <option value="Snowy">Snowy</option>
-            </select>
-        </div>
-        <div id="weather-garden">
-            <div>
-                <h3>WEATHER GARDEN</h3>
-            </div>
-            <div id="sky">
-                <p>🌧🌈⛈🌧🌧💧⛈🌧🌦🌧💧🌧🌧</p>
-            </div>
-            <div id="landscape">
-                <p>🌸🌿🌼__🌷🌻🌿_☘️🌱_🌻🌷</p>
-            </div>
-        </div>
-    </div>
+        
+    </footer>
     <script src="./node_modules/axios/dist/axios.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.min.js" integrity="sha384-kjU+l4N0Yf4ZOJErLsIcvOU2qSb74wXpOhqTvwVx3OElZRweTnQ6d31fXEoRD1Jy" crossorigin="anonymous"></script>
     <script src="./src/index.js"></script>

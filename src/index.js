@@ -173,14 +173,14 @@ const displayLiveTemp = () => {
       : convertKToC(state.liveTempInK);
 
   const liveTempElement = document.getElementById('live-temp');
-  liveTempElement.textContent = `${state.displayedLiveTemp} ${degreeSymbol} ${state.unit}`;
+  liveTempElement.textContent = `${state.displayedLiveTemp}${degreeSymbol}${state.unit}`;
 };
 
 // --- Playground Temp --- //
 const updatePlaygroundTemp = (change) => (state.playgroundTemp += change);
 
 const displayPlaygroundTemp = () =>
-  (playgroundTempElement.textContent = `${state.playgroundTemp} ${degreeSymbol} ${state.unit}`);
+  (playgroundTempElement.textContent = `${state.playgroundTemp}${degreeSymbol}${state.unit}`);
 
 const updatePlaygroundRealTemp = () => {
   displayLiveTemp();
