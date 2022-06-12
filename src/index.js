@@ -12,11 +12,9 @@ const state = {
 
 // --- HTML DOM Elements ---
 const playgroundTempElement = document.getElementById('playground-temp');
-const cityName = document.getElementById('city-name');
-const liveTempElement = document.getElementById('live-temp');
+const skyOptionElement = document.getElementById('sky-select');
 const celsiusButton = document.getElementById('celsius');
 const fahrenheitButton = document.getElementById('fahrenheit');
-const skyOptionElement = document.getElementById('sky-select');
 
 // Other global const
 const degreeSymbol = String.fromCharCode(176);
@@ -44,21 +42,27 @@ const submitCity = (event) => {
 
 const getCurrentCity = () => {
   // using HTML Geolocation API to get coordinates of the current location if browser permits
-  navigator.geolocation.getCurrentPosition(displayCurrentCity);
-};
+  const success = async (position) => {
+    // This function will make an API call to LocationIQ reverse geocoding API
+    // to get city name from lat & lon
+    // and display the current city name
+    console.log('HTML Geolocation API called.');
+    const lat = position.coords.latitude;
+    const lon = position.coords.longitude;
+    const city = await getCityFromLatLon(lat, lon);
+    if (city) {
+      state.city = `${city}`;
+    }
+    displayCityName();
+    await displayWeatherInfo(); // API call
+  };
 
-const displayCurrentCity = async (position) => {
-  // This function will make an API call to LocationIQ reverse geocoding API
-  // to get city name from lat & lon
-  // and display the current city name
-  const lat = position.coords.latitude;
-  const lon = position.coords.longitude;
-  const city = await getCityFromLatLon(lat, lon);
-  getCityFromLatLon;
-  if (city) {
-    state.city = `${city}`;
-  }
-  displayCityName();
+  const error = (err) => {
+    console.warn(`ERROR(${err.code}):${err.message}`);
+    alert('Your browser does not permit location sharing.');
+  };
+
+  navigator.geolocation.getCurrentPosition(success, error);
 };
 
 const getCityFromLatLon = async (lat, lon) => {
@@ -92,7 +96,6 @@ const updatePlayground = () => {
     state.unit === 'F'
       ? state.playgroundTemp
       : convertCToF(state.playgroundTemp);
-  displayPlaygroundTemp();
   if (tempF >= 80) {
     updatePlaygroundColor('red', 'red', '🌵__🐍_🦂_🌵🌵__🐍_🏜_🦂');
   } else if (tempF >= 70) {
@@ -104,6 +107,7 @@ const updatePlayground = () => {
   } else {
     updatePlaygroundColor('teal', 'grey', '🌲🌲⛄️🌲⛄️🍂🌲🍁🌲🌲⛄️🍂🌲');
   }
+  displayPlaygroundTemp();
 };
 
 const skyMapping = {
@@ -168,6 +172,7 @@ const displayLiveTemp = () => {
       ? convertKToF(state.liveTempInK)
       : convertKToC(state.liveTempInK);
 
+  const liveTempElement = document.getElementById('live-temp');
   liveTempElement.textContent = `${state.displayedLiveTemp} ${degreeSymbol} ${state.unit}`;
 };
 
@@ -222,6 +227,10 @@ const getTodayDateAsString = () => {
 };
 
 const displayDateTime = () => {
+  const updateDateTime = () => {
+    setTimeout(displayDateTime, 1000);
+  };
+
   const todayDateElement = document.getElementById('today-date');
   const currentTimeElement = document.getElementById('current-time');
   const dateTimeString = getTodayDateAsString();
@@ -229,10 +238,6 @@ const displayDateTime = () => {
   todayDateElement.textContent = date;
   currentTimeElement.textContent = time;
   updateDateTime();
-};
-
-const updateDateTime = () => {
-  setTimeout(displayDateTime, 1000);
 };
 
 // --- Main script --- //
@@ -281,9 +286,9 @@ const registerEventHandlers = () => {
   });
 
   const currentCityButton = document.getElementById('get-current-city-button');
-  currentCityButton.addEventListener('click', async () => {
+  currentCityButton.addEventListener('click', () => {
     getCurrentCity(); // API call
-    await displayWeatherInfo(); // API call
+    alert('Please wait a few seconds to get your current location.');
   });
 };
 
