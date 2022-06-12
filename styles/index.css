@@ -22,9 +22,6 @@ header *{
     color: white !important;
 }
 
-.nav-bar {
-  border-top: 0;
-}
 footer {
   position: absolute;
   bottom: 0;
@@ -48,13 +45,14 @@ footer {
 #weather-garden-playground {
   border: black 1px solid !important;
 }
+
 #weather-garden {
   background-color: teal;
 }
 
 #weather-garden-text {
   font-weight: bold !important;
-  color: white !important;
+  color: white;
 }
 
 #weather-description {
@@ -75,6 +73,11 @@ footer {
   font-size: 1.5rem;
 }
 
-#celsius, #fahrenheit {
-  font-family: "Titillium Web", sans-serif !important;
+.sky-text {
+  font-size: 2rem;
+  margin-right: 0.5rem;
+}
+
+#sky-select {
+  font-size: 1rem;
 }
