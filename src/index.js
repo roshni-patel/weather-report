@@ -4,10 +4,10 @@
 const state = {
   playgroundTemp: 60,
   displayedLiveTemp: null,
-  liveTempInK: 295,
-  liveweather: null,
+  liveTempInK: null,
+  liveWeather: null,
   unit: 'F',
-  cityName: 'Seattle',
+  city: 'Seattle',
 };
 
 // --- HTML DOM Elements ---
@@ -18,37 +18,21 @@ const celsiusButton = document.getElementById('celsius');
 const fahrenheitButton = document.getElementById('fahrenheit');
 const skyOptionElement = document.getElementById('sky-select');
 
-fahrenheitButton.disabled = true;
-let currentTempScale = 'Fahrenheit';
+// Other global const
+const degreeSymbol = String.fromCharCode(176);
 
-// --- Playground Temp --- //
-const updatePlaygroundTemp = (change) => (state.playgroundTemp += change);
-
-const displayPlaygroundTemp = () => {
-  playgroundTempElement.textContent = `${
-    state.playgroundTemp
-  } ${String.fromCharCode(176)} ${state.unit}`;
-};
-
-const updatePlaygroundRealTemp = () => {
-  getRealWeatherInfo();
-  displayLiveTemp();
-  state.playgroundTemp = state.displayedLiveTemp;
-  displayPlaygroundTemp();
-};
-
-// -- Input for city name -- //
-
+// --- City Name --- //
 const displayCityName = () => {
   document.getElementById('city-name').textContent = state.city;
 };
 
 const resetCityName = () => {
-  state.cityName = 'Seattle';
+  state.city = 'Seattle';
   displayCityName();
 };
 
 const submitCity = (event) => {
+  // update city name from input form
   const input = document.querySelector('input');
   if (input.value) {
     state.city = input.value;
@@ -58,8 +42,43 @@ const submitCity = (event) => {
   displayCityName();
 };
 
-// -- Update playground text color, landscape, garden bg color --
-const updatePlayground = (tempTextColor, gardenBgColor, landscapeText) => {
+const getCurrentCity = () => {
+  // using HTML Geolocation API to get coordinates of the current location if browser permits
+  navigator.geolocation.getCurrentPosition(displayCurrentCity);
+};
+
+const displayCurrentCity = async (position) => {
+  // This function will make an API call to LocationIQ reverse geocoding API
+  // to get city name from lat & lon
+  // and display the current city name
+  const lat = position.coords.latitude;
+  const lon = position.coords.longitude;
+  const city = await getCityFromLatLon(lat, lon);
+  getCityFromLatLon;
+  if (city) {
+    state.city = `${city}`;
+  }
+  displayCityName();
+};
+
+const getCityFromLatLon = async (lat, lon) => {
+  // This function will make an API call to LocationIQ reverse geocoding API
+  try {
+    const response = await axios.get(
+      `https://weather-report-backend.herokuapp.com/location/reverse?lat=${lat}&lon=${lon}`
+    );
+    const city = response.data.address.city;
+    console.log('LocationIQ Reverse Geocoding called by getCityFromLatLon');
+    return city;
+  } catch (error) {
+    console.log(error);
+    console.log('error in getCityFromLatLon');
+  }
+};
+
+// --- Playground box --- //
+
+const updatePlaygroundColor = (tempTextColor, gardenBgColor, landscapeText) => {
   const weatherGardenElement = document.getElementById('weather-garden');
   const landscapeElement = document.getElementById('landscape');
 
@@ -68,19 +87,22 @@ const updatePlayground = (tempTextColor, gardenBgColor, landscapeText) => {
   landscapeElement.textContent = landscapeText;
 };
 
-const updateAll = () => {
-  const currentTemp = state.temp;
+const updatePlayground = () => {
+  const tempF =
+    state.unit === 'F'
+      ? state.playgroundTemp
+      : convertCToF(state.playgroundTemp);
   displayPlaygroundTemp();
-  if (currentTemp >= 80) {
-    updatePlayground('red', 'red', '🌵__🐍_🦂_🌵🌵__🐍_🏜_🦂');
-  } else if (currentTemp >= 70) {
-    updatePlayground('orange', 'yellow', '🌸🌿🌼__🌷🌻🌿_☘️🌱_🌻🌷');
-  } else if (currentTemp >= 60) {
-    updatePlayground('yellow', 'pink', '🌾🌾_🍃_🪨__🛤_🌾🌾🌾_🍃');
-  } else if (currentTemp >= 50) {
-    updatePlayground('green', 'teal', '🌲🌲⛄️🌲⛄️🍂🌲🍁🌲🌲⛄️🍂🌲');
+  if (tempF >= 80) {
+    updatePlaygroundColor('red', 'red', '🌵__🐍_🦂_🌵🌵__🐍_🏜_🦂');
+  } else if (tempF >= 70) {
+    updatePlaygroundColor('orange', 'yellow', '🌸🌿🌼__🌷🌻🌿_☘️🌱_🌻🌷');
+  } else if (tempF >= 60) {
+    updatePlaygroundColor('yellow', 'pink', '🌾🌾_🍃_🪨__🛤_🌾🌾🌾_🍃');
+  } else if (tempF >= 50) {
+    updatePlaygroundColor('green', 'teal', '🌲🌲⛄️🌲⛄️🍂🌲🍁🌲🌲⛄️🍂🌲');
   } else {
-    updatePlayground('teal', 'grey', '🌲🌲⛄️🌲⛄️🍂🌲🍁🌲🌲⛄️🍂🌲');
+    updatePlaygroundColor('teal', 'grey', '🌲🌲⛄️🌲⛄️🍂🌲🍁🌲🌲⛄️🍂🌲');
   }
 };
 
@@ -95,68 +117,100 @@ const updateSky = () => {
   document.getElementById('sky').innerText = skyMapping[skyOptionElement.value];
 };
 
-const convertKToF = (kelvinTemp) => {
-  return Math.floor((kelvinTemp * 9) / 5 - 459.67);
-};
-
-const getLatLongFromCityName = async () => {
-  try {
-    const currentCityName = cityName.textContent;
-    const response = await axios.get(
-      `https://weather-report-backend.herokuapp.com/location?q=${currentCityName}`
-    );
-
-    return [response.data[0].lat, response.data[0].lon];
-  } catch (error) {
-    console.log(error);
-    console.log('error in getLatLongFromCityName!');
-  }
-};
-
+// --- Get Realtime Weather Info based on current city name --- //
 const getRealWeatherInfo = async () => {
+  // This function will make an API call to OpenWeather
   try {
     const [lat, lon] = await getLatLongFromCityName();
-
     const response = await axios.get(
       `https://weather-report-backend.herokuapp.com/weather?lat=${lat}&lon=${lon}`
     );
     state.liveTempInK = response.data.current.temp;
-    state.liveweather = response.data.current.weather[0].description;
+    state.liveWeather = response.data.current.weather[0].description;
+    console.log('OpenWeather API called by getRealWeatherInfo');
   } catch (error) {
     console.log(error);
-    console.log('error in getRealWeatherInfo!');
+    console.log('error in getRealWeatherInfo');
   }
 };
 
-const getCityFromLatLon = async (lat, lon) => {
+const getLatLongFromCityName = async () => {
+  // This function will make an API call to LocationIQ
   try {
+    const currentCityName = state.city;
     const response = await axios.get(
-      `https://weather-report-backend.herokuapp.com/location/reverse?lat=${lat}&lon=${lon}`
+      `https://weather-report-backend.herokuapp.com/location?q=${currentCityName}`
     );
-    const city = response.data.address.city;
-    return city;
+    console.log('LocationIQ API called by getLatLongFromCityName');
+    return [response.data[0].lat, response.data[0].lon];
   } catch (error) {
     console.log(error);
-    console.log('error in findLatitudeAndLongitude!');
+    console.log('error in getLatLongFromCityName');
   }
 };
 
-const getCurrentCity = () => {
-  // using HTML Geolocation API to get current location if browser permits
-  navigator.geolocation.getCurrentPosition(displayCurrentCity);
+const displayWeatherInfo = async () => {
+  await getRealWeatherInfo(); // API call
+  displayLiveWeatherDescription();
+  displayLiveTemp();
+  displayPlaygroundTemp();
 };
 
-const displayCurrentCity = async (position) => {
-  const lat = position.coords.latitude;
-  const lon = position.coords.longitude;
-  const city = await getCityFromLatLon(lat, lon);
-  if (city) {
-    state.cityName = `${city}`;
-  }
-  displayCityName();
+const displayLiveWeatherDescription = () => {
+  document.getElementById('weather-description').textContent =
+    state.liveWeather;
 };
 
-// --- Display Live Date Time ---
+// --- Live Temp of displayed city --- //
+const displayLiveTemp = () => {
+  state.displayedLiveTemp =
+    state.unit === 'F'
+      ? convertKToF(state.liveTempInK)
+      : convertKToC(state.liveTempInK);
+
+  liveTempElement.textContent = `${state.displayedLiveTemp} ${degreeSymbol} ${state.unit}`;
+};
+
+// --- Playground Temp --- //
+const updatePlaygroundTemp = (change) => (state.playgroundTemp += change);
+
+const displayPlaygroundTemp = () =>
+  (playgroundTempElement.textContent = `${state.playgroundTemp} ${degreeSymbol} ${state.unit}`);
+
+const updatePlaygroundRealTemp = () => {
+  displayLiveTemp();
+  state.playgroundTemp = state.displayedLiveTemp;
+  displayPlaygroundTemp();
+};
+
+// Temperature conversion
+
+const convertFToC = (tempF) => Math.round((5 / 9) * (tempF - 32));
+const convertCToF = (tempC) => Math.round(tempC * (9 / 5) + 32);
+const convertKToC = (tempK) => Math.round(tempK - 273.15);
+const convertKToF = (tempK) => Math.round((tempK - 273.15) * (9 / 5) + 32);
+
+const convertAllToCelsius = () => {
+  celsiusButton.disabled = true;
+  fahrenheitButton.disabled = false;
+  state.unit = 'C';
+  state.playgroundTemp = convertFToC(state.playgroundTemp);
+  state.displayedLiveTemp = convertKToC(state.liveTempInK);
+  displayPlaygroundTemp();
+  displayLiveTemp();
+};
+
+const convertAllToFahrenheit = () => {
+  fahrenheitButton.disabled = true;
+  celsiusButton.disabled = false;
+  state.unit = 'F';
+  state.playgroundTemp = convertCToF(state.playgroundTemp);
+  state.displayedLiveTemp = convertKToF(state.liveTempInK);
+  displayPlaygroundTemp();
+  updatePlayground();
+};
+
+// --- Display Live Date Time --- //
 const getTodayDateAsString = () => {
   const utcDateTime = new Date();
   const pstDateTime = utcDateTime.toLocaleString('en-US', {
@@ -181,79 +235,56 @@ const updateDateTime = () => {
   setTimeout(displayDateTime, 1000);
 };
 
-//--- Display live weather info ---
+// --- Main script --- //
+fahrenheitButton.disabled = true;
 
-const displayLiveWeatherDescription = () => {
-  getRealWeatherInfo();
-  const weatherInfoElement = document.getElementById('weather-description');
-  weatherInfoElement.textContent = state.liveweather;
-};
+displayDateTime();
 
-const displayLiveTemp = async () => {
-  state.displayedLiveTemp =
-    state.unit === 'F'
-      ? convertKToF(state.liveTempInK)
-      : convertKToC(state.liveTempInK);
-  const degreeSymbol = String.fromCharCode(176);
-  liveTempElement.textContent = `${state.displayedLiveTemp} ${degreeSymbol} ${state.unit}`;
-};
-
-const displayWeatherInfo = () => {
-  displayLiveWeatherDescription();
-  getRealWeatherInfo();
-  displayLiveTemp();
-  displayPlaygroundTemp();
-};
-
-const convertFToC = (tempF) => Math.round((5 / 9) * (tempF - 32));
-const convertCToF = (tempC) => Math.round((tempC * 9) / 5 + 32);
-const convertKToC = (tempK) => Math.round(tempK - 273.15);
-
-const convertToCelsius = () => {
-  celsiusButton.disabled = true;
-  fahrenheitButton.disabled = false;
-  state.unit = 'C';
-  state.playgroundTemp = convertFToC(state.playgroundTemp);
-  state.displayedLiveTemp = convertKToC(state.liveTempInK);
-  displayPlaygroundTemp();
-  displayLiveTemp();
-};
-
-const convertToFahrenheit = () => {
-  fahrenheitButton.disabled = true;
-  celsiusButton.disabled = false;
-  state.unit = 'F';
-  state.playgroundTemp = convertCToF(state.playgroundTemp);
-  state.displayedLiveTemp = convertKToF(state.liveTempInK);
-  displayPlaygroundTemp();
-  displayLiveTemp();
-};
-
-const registerEventHandlers = () => {
-  const increaseButton = document.getElementById('increase-button');
-  const decreaseButton = document.getElementById('decrease-button');
-  const resetButton = document.getElementById('reset-button');
-  const form = document.getElementById('form');
-  const getRealTimeTempButton = document.getElementById('get-realtime-temp');
-  const currentCityButton = document.getElementById('get-current-city-button');
-
-  increaseButton.addEventListener('click', () => updatePlaygroundTemp(1));
-  increaseButton.addEventListener('click', updateAll);
-  decreaseButton.addEventListener('click', () => updatePlaygroundTemp(-1));
-  decreaseButton.addEventListener('click', updateAll);
-  resetButton.addEventListener('click', resetCityName);
-  form.addEventListener('submit', submitCity);
-  form.addEventListener('submit', displayWeatherInfo);
-  skyOptionElement.addEventListener('change', updateSky);
-  getRealTimeTempButton.addEventListener('click', updatePlaygroundRealTemp);
-  currentCityButton.addEventListener('click', getCurrentCity);
-  currentCityButton.addEventListener('click', displayWeatherInfo);
-  celsiusButton.addEventListener('click', convertToCelsius);
-  fahrenheitButton.addEventListener('click', convertToFahrenheit);
-};
-
-updateDateTime();
-if (state.liveweather === null) {
+if (state.liveTempInK === null) {
   displayWeatherInfo();
 }
+
+const registerEventHandlers = () => {
+  celsiusButton.addEventListener('click', convertAllToCelsius);
+  fahrenheitButton.addEventListener('click', convertAllToFahrenheit);
+
+  skyOptionElement.addEventListener('change', updateSky);
+
+  const increaseButton = document.getElementById('increase-button');
+  increaseButton.addEventListener('click', () => {
+    updatePlaygroundTemp(1);
+    updatePlayground();
+  });
+
+  const decreaseButton = document.getElementById('decrease-button');
+  decreaseButton.addEventListener('click', () => {
+    updatePlaygroundTemp(-1);
+    updatePlayground();
+  });
+
+  const resetButton = document.getElementById('reset-button');
+  resetButton.addEventListener('click', async () => {
+    resetCityName();
+    await displayWeatherInfo(); // API call
+  });
+
+  const form = document.getElementById('form');
+  form.addEventListener('submit', async (e) => {
+    submitCity(e);
+    await displayWeatherInfo(); // API call
+  });
+
+  const getRealTimeTempButton = document.getElementById('get-realtime-temp');
+  getRealTimeTempButton.addEventListener('click', async () => {
+    await getRealWeatherInfo(); // API call
+    updatePlaygroundRealTemp();
+  });
+
+  const currentCityButton = document.getElementById('get-current-city-button');
+  currentCityButton.addEventListener('click', async () => {
+    getCurrentCity(); // API call
+    await displayWeatherInfo(); // API call
+  });
+};
+
 document.addEventListener('DOMContentLoaded', registerEventHandlers);
