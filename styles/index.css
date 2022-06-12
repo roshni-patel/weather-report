@@ -10,6 +10,7 @@ body {
   margin-bottom: 60px;
   font-family: "Titillium Web", sans-serif !important;
   color: #636363;
+  font-weight: bold;
 }
 
 header {
@@ -21,6 +22,9 @@ header *{
     color: white !important;
 }
 
+.nav-bar {
+  border-top: 0;
+}
 footer {
   position: absolute;
   bottom: 0;
@@ -51,4 +55,26 @@ footer {
 #weather-garden-text {
   font-weight: bold !important;
   color: white !important;
+}
+
+#weather-description {
+    text-transform: capitalize;
+}
+
+#get-realtime-temp {
+  width: 7rem;
+  height: 4rem;
+  margin-right: 1rem;
+}
+
+#playground-temp {
+  margin-right: 1rem;
+}
+
+#sky, #landscape {
+  font-size: 1.5rem;
+}
+
+#celsius, #fahrenheit {
+  font-family: "Titillium Web", sans-serif !important;
 }

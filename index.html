@@ -7,14 +7,16 @@
     <link href="./styles/index.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Titillium+Web:ital,wght@0,200;1,200;1,400&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Titillium+Web:ital,wght@0,200;0,300;0,400;0,600;0,700;1,200;1,300;1,400;1,600;1,700&display=swap" rel="stylesheet">
     <title>Weather Report</title>
 </head>
 <body>
-    <header class="nav-bar d-flex flex-row justify-content-between align-items-center border mb-3 p-1">
+    <header class="nav-bar d-flex flex-row justify-content-between align-items-center border mb-3 p-1 border-0">
         <div>Weather Report Playground</div>
         <div>Coded with &#128151;</div>
-        <div class="btn" role="button" href="https://github.com/roshni-patel/weather-report">Open-source code</d>
+        <div class="btn" role="button"><a href="https://github.com/roshni-patel/weather-report" target="_blank"><i class="fab fa-github"></i></a></div>
     </header>
     <main class="container">
         <div class="box m-3 p-3"> 
@@ -22,18 +24,18 @@
                 <div id="city-search-bar" class="col-10">
                     <form id="form">
                         <input type="text" id="city-search-box" placeholder="Type a city" autocomplete="off"/>
-                        <button type="submit">
+                        <button type="submit" class="btn rounded">
                             <i class="fas fa-search"></i>
                         </button>
-                        <button type="button" id="get-current-city-button">
+                        <button type="button" id="get-current-city-button" class="btn rounded">
                             <i class="fas fa-location-arrow"></i>
                         </button>
-                        <button type="button" id="reset-button">Reset</button>
+                        <button type="button" id="reset-button" class="btn rounded">Reset</button>
                     </form>
                 </div>
                 <div id="temperature-conversion" class="col-2">
-                    <button type="button" id="celsius" value="C">&#8451;</button>
-                    <button type="button" id="fahrenheit" value="F">&#8457;</button>
+                    <button type="button" id="celsius" value="C" class="btn btn-secondary rounded">&#8451;</button>
+                    <button type="button" id="fahrenheit" value="F" class="btn btn-secondary rounded">&#8457;</button>
                 </div>
             </div>
             <div class="row g-2">
@@ -49,7 +51,7 @@
                 <div id="weather-garden-playground" class="col-8 border rounded">
                     <div class="row g-2 m-2 p-2">
                             <div id="get-temperature" class="col d-flex flex-row">
-                                <button id="get-realtime-temp" type="button">Get Live Temperature</button>
+                                <button id="get-realtime-temp" type="button" class="btn btn-secondary rounded">Get Live Temperature</button>
                                 <div id="playground-temp" class="display-6 m1"></div>
                                 <div>
                                     <div class="btn btn-secondary m-1" id="increase-button" role="button"><span class="fas fa-arrow-up"></span></div>
@@ -72,7 +74,7 @@
                         <div class="row">
                             <div class="col"></div>
                             <div id="weather-garden" class="col-6 border rounded text-center m-3">
-                                <div><p id="weather-garder-text">WEATHER GARDEN</p></div>
+                                <div><p id="weather-garden-text">WEATHER GARDEN</p></div>
                                 <div><p id="sky">🌧🌈⛈🌧🌧💧⛈🌧🌦🌧💧🌧🌧</p></div>
                                 <div><p id="landscape">🌸🌿🌼__🌷🌻🌿_☘️🌱_🌻🌷</p></div>
                             </div>
@@ -91,6 +93,6 @@
     </footer>
     <script src="./node_modules/axios/dist/axios.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.min.js" integrity="sha384-kjU+l4N0Yf4ZOJErLsIcvOU2qSb74wXpOhqTvwVx3OElZRweTnQ6d31fXEoRD1Jy" crossorigin="anonymous"></script>
-    <script src="./src/index.js"></script>
+    <script src="./src/index.js" type="module"></script>
 </body>
 </html>

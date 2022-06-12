@@ -85,6 +85,9 @@ const getCityFromLatLon = async (lat, lon) => {
 const updatePlaygroundColor = (tempTextColor, gardenBgColor, landscapeText) => {
   const weatherGardenElement = document.getElementById('weather-garden');
   const landscapeElement = document.getElementById('landscape');
+  const weatherGardenTextElement = document.getElementById(
+    'weather-garden-text'
+  );
 
   playgroundTempElement.style.color = tempTextColor;
   weatherGardenElement.style.backgroundColor = gardenBgColor;
@@ -101,7 +104,7 @@ const updatePlayground = () => {
   } else if (tempF >= 70) {
     updatePlaygroundColor('orange', 'yellow', '🌸🌿🌼__🌷🌻🌿_☘️🌱_🌻🌷');
   } else if (tempF >= 60) {
-    updatePlaygroundColor('yellow', 'pink', '🌾🌾_🍃_🪨__🛤_🌾🌾🌾_🍃');
+    updatePlaygroundColor('#F6BE00', 'pink', '🌾🌾_🍃_🪨__🛤_🌾🌾🌾_🍃');
   } else if (tempF >= 50) {
     updatePlaygroundColor('green', 'teal', '🌲🌲⛄️🌲⛄️🍂🌲🍁🌲🌲⛄️🍂🌲');
   } else {
