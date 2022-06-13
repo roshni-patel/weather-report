@@ -15,6 +15,7 @@ const playgroundTempElement = document.getElementById('playground-temp');
 const skyOptionElement = document.getElementById('sky-select');
 const celsiusButton = document.getElementById('celsius');
 const fahrenheitButton = document.getElementById('fahrenheit');
+const inputElement = document.querySelector('input');
 
 // Other global const
 const degreeSymbol = String.fromCharCode(176);
@@ -31,13 +32,21 @@ const resetCityName = () => {
 
 const submitCity = (event) => {
   // update city name from input form
-  const input = document.querySelector('input');
-  if (input.value) {
-    state.city = input.value;
+  if (inputElement.value) {
+    state.city = inputElement.value;
   }
-  input.value = '';
+  inputElement.value = '';
   event.preventDefault();
   displayCityName();
+};
+
+const cityName = document.getElementById('city-name');
+
+const updateCityName = (e) => {
+  cityName.textContent = e.target.value;
+  if (e.target.value.length === 0) {
+    cityName.textContent = 'Seattle';
+  }
 };
 
 const getCurrentCity = () => {
@@ -254,8 +263,8 @@ if (state.liveTempInK === null) {
 const registerEventHandlers = () => {
   celsiusButton.addEventListener('click', convertAllToCelsius);
   fahrenheitButton.addEventListener('click', convertAllToFahrenheit);
-
   skyOptionElement.addEventListener('change', updateSky);
+  inputElement.addEventListener('input', updateCityName);
 
   const increaseButton = document.getElementById('increase-button');
   increaseButton.addEventListener('click', () => {
