@@ -18,8 +18,8 @@ header {
 }
 
 header *{
-    font-size: 20px !important;
-    color: white !important;
+    font-size: 20px;
+    color: white;
 }
 
 footer {
@@ -51,7 +51,7 @@ footer {
 }
 
 #weather-garden-text {
-  font-weight: bold !important;
+  font-weight: bold;
   color: white;
 }
 
